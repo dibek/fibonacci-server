@@ -1,9 +1,14 @@
-FROM openjdk:11-jre-slim
+# Use a base image with Java runtime
+FROM adoptopenjdk/openjdk11:alpine-slim
 
+# Set the working directory in the container
 WORKDIR /app
 
-COPY FibonacciServer.java /app
+# Copy the application JAR file into the container
+COPY build/libs/*.jar app.jar
 
-RUN javac FibonacciServer.java
+# Expose the port that your application listens on
+EXPOSE 8080
 
-CMD ["java", "FibonacciServer"]
+# Specify the command to run your application
+CMD ["java", "-jar", "app.jar"]

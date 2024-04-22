@@ -24,7 +24,6 @@ public class FibonacciServerTest {
         String result = handler.generateFibonacciSeries(n);
         String[] parts = result.split(", ");
         assertEquals(n, parts.length); // Check if the length of series is correct
-        // You can add more assertions to check the generated series here
     }
 
 }

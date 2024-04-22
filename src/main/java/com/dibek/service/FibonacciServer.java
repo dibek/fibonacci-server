@@ -1,4 +1,5 @@
 package com.dibek.service;
+
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
@@ -8,10 +9,12 @@ import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
 
+
 public class FibonacciServer {
 
+
     public static void main(String[] args) throws Exception {
-        int port = 8080;
+        int port = 9000;
         HttpServer server = HttpServer.create(new InetSocketAddress(port), 0);
         server.createContext("/fibonacci", new FibonacciHandler());
         server.setExecutor(null); // creates a default executor
@@ -25,6 +28,7 @@ public class FibonacciServer {
             if ("GET".equals(exchange.getRequestMethod())) {
                 Map<String, String> params = queryToMap(exchange.getRequestURI().getQuery());
                 int maxIterations = Integer.parseInt(params.getOrDefault("maxIterations", "10"));
+                System.out.println("Number of iterations " + maxIterations);
                 String response = generateFibonacciSeries(maxIterations);
                 exchange.sendResponseHeaders(200, response.length());
                 try (OutputStream os = exchange.getResponseBody()) {
@@ -35,7 +39,7 @@ public class FibonacciServer {
             }
         }
 
-        String generateFibonacciSeries(int n) {
+        public String generateFibonacciSeries(int n) {
             StringBuilder sb = new StringBuilder();
             int a = 0, b = 1;
             for (int i = 0; i < n; i++) {

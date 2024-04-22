@@ -14,20 +14,20 @@ spec:
     spec:
       containers:
       - name: fibonacci-server
-        image: <your-docker-image>
+        image: fibonacci-server-1.0.0
         ports:
-        - containerPort: 8080
+        - containerPort: 9000
         livenessProbe:
           httpGet:
             path: /fibonacci
-            port: 8080
+            port: 9000
           initialDelaySeconds: 15
           periodSeconds: 10
           failureThreshold: 3
         readinessProbe:
           httpGet:
             path: /fibonacci
-            port: 8080
+            port: 9000
           initialDelaySeconds: 15
           periodSeconds: 10
           failureThreshold: 3
