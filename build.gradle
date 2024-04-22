@@ -33,11 +33,6 @@ sourceSets {
     main.resources.srcDir "src/main/resources"
 }
 
-task copyToLibs( type: Copy ) {
-    into "$buildDir/libs"
-    from configurations.implementation
-}
-
 jar {
     manifest {
         attributes 'Main-Class': mainClassName,
