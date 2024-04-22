@@ -1,0 +1,16 @@
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        google()
+        mavenCentral()
+    }
+}
+
+rootProject.name = 'FibonacciService'
+
+// Set the version for the project
+ext {
+    version = '1.0.0' // Set your desired version here
+}
+
+
