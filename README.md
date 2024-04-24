@@ -9,6 +9,16 @@
 ./gradlew test
 ````
 
+## Integration test
+
+To run the integration test we need to set the variable 
+FIBONACCI_SERVER_IP
+Example using the cluster:
+```bash
+export FIBONACCI_SERVER_IP=$(kubectl get svc fibonacci-server | awk 'NR==2 {print $4}')
+```
+
+
 ## Docker commands to build image and run it
 ```bash
 docker build -t fibonacci-server .
@@ -138,8 +148,8 @@ First we need to find the ip address with this command
 kubectl get svc fibonacci-server
 ```
 
-Then we can use curl to test it
+Then we can use curl to test it (we need awk installed if we want to use the included script)
 
 ```bash
-curl <EXTERNAL-IP>:9001/fibonacci
+curl $(kubectl get svc fibonacci-server | awk 'NR==2 {print $4}'):9001/fibonacci
 ```
