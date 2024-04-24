@@ -79,7 +79,7 @@ minikube start --cpus 4 --memory 4096 --insecure-registry registry.dev.svc.clust
 kubectl create namespace dev
 ```
 
-### Creata service to reach registry inside minikube
+### Create a service to reach registry inside minikube
 
 ```bash
 cat <<EOF | kubectl apply -n dev -f -
@@ -127,21 +127,12 @@ curl -i -X GET <external-balancer-ip>:9001/fibonacci\?maxIterations=4
 
 ```
 
-
-
-## How to start minikube with access to the local docker
-```bash
-`minikube start --docker-env`
-```
-
-
-
 ## Add registry reachable from the cluster 
 
 See : https://gist.github.com/trisberg/37c97b6cc53def9a3e38be6143786589
 
 
-## Try the load balancer 
+## Find the ip address to try the load balancer 
 
 First we need to find the ip address with this command
 ```bash
