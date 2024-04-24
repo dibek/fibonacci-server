@@ -1,44 +1,33 @@
 plugins {
     id 'java'
     id 'application'
-    id 'com.palantir.docker' version '0.35.0'
 }
 
+mainClassName = 'com.dibek.service.FibonacciServer'
+
+
+group 'com.dibek.service'
+version '1.0-SNAPSHOT'
+
 repositories {
-    jcenter()
     mavenCentral()
 }
 
 dependencies {
-  implementation 'org.apache.logging.log4j:log4j-api:2.14.1'
-  implementation 'org.apache.logging.log4j:log4j-core:2.14.1'    
-  testImplementation "org.junit.jupiter:junit-jupiter-params:5.8.0"
-  testImplementation "org.junit.jupiter:junit-jupiter-api:5.8.0"
-}
+    // Dependencies for HTTP server
+    implementation 'com.sun.net.httpserver:http:20070405'
 
-mainClassName = 'com.dibek.service.FibonacciServer' // Change to your main class name
+    // Dependencies for JUnit 5
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.2'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.2'
+}
 
 test {
-    //useJUnitPlatform()
+    useJUnitPlatform()
+    exclude '**/*IntegrationTest.class'
 }
 
-docker {
-    name 'FibonacciServer'
-    files "$buildDir/libs/${project.name}-${project.version}.jar"
-    buildArgs(['JAR_FILE': "${project.name}-${project.version}.jar"])
+tasks.register('integrationTest', Test) {
+    useJUnitPlatform()
+    include '**/*IntegrationTests.class'
 }
-
-sourceSets {
-    main.java.srcDir "src/main/java"
-    main.resources.srcDir "src/main/resources"
-}
-
-jar {
-    manifest {
-        attributes 'Main-Class': mainClassName,
-                   'Class-Path': configurations.runtimeClasspath.files.collect { "libs/${it.name}" }.join(' ')
-    }
-}
-
-
-

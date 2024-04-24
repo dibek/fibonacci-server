@@ -1,78 +1,66 @@
 package com.dibek.service;
 
+import com.sun.net.httpserver.HttpServer;
+
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpHandler;
-import com.sun.net.httpserver.HttpServer;
-
 
 public class FibonacciServer {
 
+    private static final int DEFAULT_ITERATIONS = 20;
+    private static final int PORT = 9000;
 
-    public static void main(String[] args) throws Exception {
-        int port = 9000;
-        HttpServer server = HttpServer.create(new InetSocketAddress(port), 0);
+    public static void main(String[] args) throws IOException {
+        HttpServer server = HttpServer.create(new InetSocketAddress(PORT), 0);
         server.createContext("/fibonacci", new FibonacciHandler());
         server.setExecutor(null); // creates a default executor
         server.start();
-        System.out.println("Server fibonacci started on port  " + port);
+        System.out.println("Server is running on port " + PORT + "...");
     }
 
-    protected static class FibonacciHandler implements HttpHandler {
+    static class FibonacciHandler implements com.sun.net.httpserver.HttpHandler {
         @Override
-        public void handle(HttpExchange exchange) throws IOException {
-            System.out.println("Main Handler ");
-            if ("GET".equals(exchange.getRequestMethod())) {
-                System.out.println("Request URI " + exchange.getRequestURI());
-                Map<String, String> params = queryToMap(exchange.getRequestURI().getQuery());
-                int maxIterations = Integer.parseInt(params.getOrDefault("maxIterations", "10"));
-                System.out.println("Number of iterations " + maxIterations);
-                String response = generateFibonacciSeries(maxIterations);
-                exchange.sendResponseHeaders(200, response.length());
-                try (OutputStream os = exchange.getResponseBody()) {
-                    os.write(response.getBytes());
+        public void handle(com.sun.net.httpserver.HttpExchange exchange) throws IOException {
+            String query = exchange.getRequestURI().getQuery();
+            int maxIterations = DEFAULT_ITERATIONS;
+            if (query != null) {
+                Map<String, String> queryParams = parseQueryParams(query);
+                if (queryParams.containsKey("maxIterations")) {
+                    maxIterations = Integer.parseInt(queryParams.get("maxIterations"));
                 }
-            } else {
-                exchange.sendResponseHeaders(405, -1); // Method Not Allowed
             }
-        }
+            String response = generateFibonacci(maxIterations);
 
-        public String generateFibonacciSeries(int n) {
-            StringBuilder sb = new StringBuilder();
-            int a = 0, b = 1;
-            for (int i = 0; i < n; i++) {
-                sb.append(a).append(", ");
-                int temp = a;
-                a = b;
-                b += temp;
-            }
-            System.out.println("Generated series ");
-            return sb.toString();
+            exchange.sendResponseHeaders(200, response.getBytes().length);
+            OutputStream os = exchange.getResponseBody();
+            os.write(response.getBytes());
+            os.close();
         }
+    }
 
-        private Map<String, String> queryToMap(String query) {
-            if (query == null || query.isEmpty() ) return Collections.emptyMap();
-
-            if (!query.contains("&")) {
-                System.out.println("Query " + query);
-                String[] values = query.split("=");
-                Map<String,String> queryMap =  new HashMap<>();
-                System.out.println("Number iteration from array " + values[1]);
-                queryMap.put(values[0], values[1]);
-                return queryMap;
-            }
-              return Stream.of(query.split("&"))
-               .filter(s -> !s.isEmpty())
-               .map(kv -> kv.split("=", 2)) 
-               .collect(Collectors.toMap(x -> x[0], x-> x[1]));
+    // Method to generate Fibonacci series
+    static String generateFibonacci(int maxIterations) {
+        StringBuilder result = new StringBuilder();
+        int a = 0, b = 1;
+        for (int i = 0; i < maxIterations; i++) {
+            result.append(a).append(", ");
+            int temp = a;
+            a = b;
+            b = temp + b;
         }
+        return result.toString();
+    }
+
+    // Method to parse query parameters
+    private static Map<String, String> parseQueryParams(String query) {
+        Map<String, String> params = new HashMap<>();
+        Arrays.stream(query.split("&"))
+                .map(param -> param.split("="))
+                .forEach(pair -> params.put(pair[0], pair[1]));
+        return params;
     }
 }

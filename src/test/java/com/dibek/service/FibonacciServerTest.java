@@ -1,29 +1,21 @@
 package com.dibek.service;
 
+import org.junit.jupiter.api.Test;
+
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.Scanner;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
-
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
-
 
 public class FibonacciServerTest {
 
-
-    public void testGenerateSingleFibonacciSeries() {
-        FibonacciServer.FibonacciHandler handler = new FibonacciServer.FibonacciHandler();
-        String result = handler.generateFibonacciSeries(10);
-        assertEquals("0, 1, 1, 2, 3, 5, 8, 13, 21, 34, ", result);
-    }
-    
-    @ParameterizedTest
-    @ValueSource(ints = {5, 10, 15}) // Test with different values of n
-    public void testGenerateMultipleFibonacciSeries(int n) {
-        FibonacciServer.FibonacciHandler handler = new FibonacciServer.FibonacciHandler();
-        String result = handler.generateFibonacciSeries(n);
-        String[] parts = result.split(", ");
-        assertEquals(n, parts.length); // Check if the length of series is correct
+    @Test
+    public void testGenerateFibonacci() {
+        assertEquals("0, 1, 1, 2, 3, 5, 8, ", FibonacciServer.generateFibonacci(7));
+        assertEquals("0, 1, 1, 2, 3, 5, 8, 13, ", FibonacciServer.generateFibonacci(8));
+        assertEquals("0, 1, 1, 2, 3, 5, 8, 13, 21, 34, ", FibonacciServer.generateFibonacci(10));
     }
 
 }
