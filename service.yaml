@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: fibonacci-server
-          image: fibonacci-server-1.0.0
+          image: fibonacci-server-1.0.0:latest
           ports:
             - containerPort: 9000
           readinessProbe:
