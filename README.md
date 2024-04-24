@@ -123,7 +123,7 @@ minikube tunnel
 
 ## Connect to the service in the cluster
 ```bash
-curl -i -X GET $(kubectl get svc fibonacci-server | awk 'NR==2 {print $4}'):9001/fibonacci\?maxIterations=4
+curl -i -X GET $(kubectl get svc fibonacci-server | awk 'NR==2 {print $4}'):9001/fibonacci\?n=4
 
 ```
 

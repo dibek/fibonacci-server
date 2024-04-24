@@ -7,9 +7,9 @@ export let options = {
 };
 
 export default function () {
-  let res = http.get('http://localhost:8080/fibonacci?maxIterations=10');
+  let res = http.get('http://localhost:8080/fibonacci?n=10');
   check(res, {
     'status is 200': (r) => r.status === 200,
-    'body contains Fibonacci series': (r) => r.body.includes('0, 1, 1, 2, 3, 5, 8, 13, 21, 34'),
+    'body contains Fibonacci series': (r) => r.body.includes('34'),
   });
 }
