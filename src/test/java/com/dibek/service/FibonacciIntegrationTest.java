@@ -37,7 +37,7 @@ public class FibonacciIntegrationTest {
         connection.disconnect();
 
         // Default number of iterations is 20
-        assertEquals(FibonacciServer.generateFibonacci(20), response.toString());
+        assertEquals(FibonacciServer.extractNSeries(20), response.toString());
     }
 
 
@@ -46,7 +46,7 @@ public class FibonacciIntegrationTest {
     public void testFibonacciEndpointWithDifferentValues(int maxIteration) {
         try {
             // Create URL
-            URL url = new URL("http://" + ipAddress + ":9001/fibonacci?max=" + maxIteration);
+            URL url = new URL("http://" + ipAddress + ":9001/fibonacci?n=" + maxIteration);
 
             // Create connection
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();

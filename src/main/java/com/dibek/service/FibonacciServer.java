@@ -29,11 +29,11 @@ public class FibonacciServer {
             int maxIterations = DEFAULT_ITERATIONS;
             if (query != null) {
                 Map<String, String> queryParams = parseQueryParams(query);
-                if (queryParams.containsKey("maxIterations")) {
-                    maxIterations = Integer.parseInt(queryParams.get("maxIterations"));
+                if (queryParams.containsKey("n")) {
+                    maxIterations = Integer.parseInt(queryParams.get("n"));
                 }
             }
-            String response = generateFibonacci(maxIterations);
+            String response = extractNSeries(maxIterations);
 
             exchange.sendResponseHeaders(200, response.getBytes().length);
             OutputStream os = exchange.getResponseBody();
@@ -43,16 +43,14 @@ public class FibonacciServer {
     }
 
     // Method to generate Fibonacci series
-    static String generateFibonacci(int maxIterations) {
-        StringBuilder result = new StringBuilder();
+    static String extractNSeries(int n) {
         int a = 0, b = 1;
-        for (int i = 0; i < maxIterations; i++) {
-            result.append(a).append(", ");
-            int temp = a;
+        for (int i = 0; i < n - 2; i++) {
+            int sum = a + b;
             a = b;
-            b = temp + b;
+            b = sum;
         }
-        return result.toString();
+        return b + "";
     }
 
     // Method to parse query parameters

@@ -7,10 +7,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class FibonacciServerTest {
 
     @Test
-    public void testGenerateFibonacci() {
-        assertEquals("0, 1, 1, 2, 3, 5, 8, ", FibonacciServer.generateFibonacci(7));
-        assertEquals("0, 1, 1, 2, 3, 5, 8, 13, ", FibonacciServer.generateFibonacci(8));
-        assertEquals("0, 1, 1, 2, 3, 5, 8, 13, 21, 34, ", FibonacciServer.generateFibonacci(10));
+    public void testExtractNSeries() {
+        assertEquals("8", FibonacciServer.extractNSeries(7));
+        assertEquals("13", FibonacciServer.extractNSeries(8));
+        assertEquals("34", FibonacciServer.extractNSeries(10));
     }
 
 }
