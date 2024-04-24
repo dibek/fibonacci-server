@@ -8,7 +8,7 @@ WORKDIR /app
 COPY build/libs/*.jar app.jar
 
 # Expose the port that your application listens on
-EXPOSE 8080
+EXPOSE 9000
 
 # Specify the command to run your application
 CMD ["java", "-jar", "app.jar"]
