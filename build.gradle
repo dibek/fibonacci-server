@@ -5,8 +5,7 @@ plugins {
 
 mainClassName = 'com.dibek.service.FibonacciServer'
 
-
-group 'com.dibek.service'
+group 'com.example'
 version '1.0-SNAPSHOT'
 
 repositories {
@@ -27,7 +26,14 @@ test {
     exclude '**/*IntegrationTest.class'
 }
 
+jar {
+    manifest {
+        attributes(
+                'Main-Class': mainClassName
+        )
+    }
+}
 tasks.register('integrationTest', Test) {
     useJUnitPlatform()
-    include '**/*IntegrationTests.class'
+    include '**/*IntegrationTest.class'
 }
