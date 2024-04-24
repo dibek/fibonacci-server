@@ -39,13 +39,13 @@ kubectl delete service fibonacci-server
 ````
 ## Tag the image for the local registry
 ```bash
-`docker tag fibonacci-server:latest <ip-host>:5000/fibonacci-server:latest`
+`docker tag fibonacci-server:latest registry.dev.svc.cluster.local:5000/fibonacci-server:latest`
 ````
 
 ## Push the image to the local registry
 
 ```bash
-docker push localhost:5000/fibonacci-server:latest
+docker push registry.dev.svc.cluster.local:5000/fibonacci-server:latest
 ```
 
 ## Create registry secret
@@ -56,6 +56,53 @@ kubectl create secret docker-registry my-registry-secret \
 --docker-username=dibek \
 --docker-password=dibek \
 --docker-email=dibek71@gmail.com
+```
+
+## Start minikube 
+
+```bash
+minikube start --cpus 4 --memory 4096 --insecure-registry registry.dev.svc.cluster.local:5000
+```
+
+### Setting up env dev
+```bash
+kubectl create namespace dev
+```
+
+### Creata service to reach registry inside minikube
+
+```bash
+cat <<EOF | kubectl apply -n dev -f -
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: registry
+spec:
+  ports:
+  - protocol: TCP
+    port: 5000
+    targetPort: 5000
+---
+kind: Endpoints
+apiVersion: v1
+metadata:
+  name: registry
+subsets:
+  - addresses:
+      - ip: $DEV_IP
+    ports:
+      - port: 5000
+EOF
+```
+
+
+
+
+### Switch to dev environment and setting as default
+
+```bash
+ kubectl config set-context --current --namespace=dev  
 ```
 
 ## Run a tunnel for the load balancer locally with minikube
@@ -77,3 +124,22 @@ curl -i -X GET <external-balancer-ip>:9001/fibonacci\?maxIterations=4
 `minikube start --docker-env`
 ```
 
+
+
+## Add registry reachable from the cluster 
+
+See : https://gist.github.com/trisberg/37c97b6cc53def9a3e38be6143786589
+
+
+## Try the load balancer 
+
+First we need to find the ip address with this command
+```bash
+kubectl get svc fibonacci-server
+```
+
+Then we can use curl to test it
+
+```bash
+curl <EXTERNAL-IP>:9001/fibonacci
+```
