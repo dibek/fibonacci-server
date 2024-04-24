@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: fibonacci-server
-          image: fibonacci-server-1.0.0:latest
+          image: http://192.168.1.106:5000/fibonacci-server:latest # this is my ip host it needs to replaced in another env
           ports:
             - containerPort: 9000
           readinessProbe:

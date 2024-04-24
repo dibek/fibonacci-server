@@ -11,9 +11,9 @@
 
 ## Docker commands to build image and run it
 ```bash
-docker build -t fibonacci-server-1.0.0 .
+docker build -t fibonacci-server .
 
-docker run -p 9000:9000 fibonacci-server-1.0.0
+docker run -p 9000:9000 fibonacci-server:latest
 ````
 ## Deploy image in the local cluster
 ```bash
@@ -34,18 +34,18 @@ kubectl delete service fibonacci-server
 
 ## Run a local registry for the images
 ```bash
-docker run -d -p 5000:5000 --name registry registry:2
+`docker run -d -p 5000:5000 --name registry registry:2`
 
 ````
 ## Tag the image for the local registry
 ```bash
-docker tag fibonacci-server-1.0.0:latest localhost:5000/fibonacci-server-1.0.0:latest
+`docker tag fibonacci-server:latest <ip-host>:5000/fibonacci-server:latest`
 ````
 
 ## Push the image to the local registry
 
 ```bash
-docker push localhost:5000/fibonacci-server-1.0.0:latest
+docker push localhost:5000/fibonacci-server:latest
 ```
 
 ## Create registry secret
@@ -71,4 +71,9 @@ curl -i -X GET <external-balancer-ip>:9001/fibonacci\?maxIterations=4
 ```
 
 
+
+## How to start minikube with access to the local docker
+```bash
+`minikube start --docker-env`
+```
 
